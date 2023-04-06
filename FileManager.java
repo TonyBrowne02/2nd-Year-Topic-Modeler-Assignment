@@ -9,43 +9,75 @@ import java.util.*;
 
 public class FileManager 
 {
-    public List<Map.Entry<String, Integer>> CountWords(String file)
+    public static List<Map.Entry<String, Integer>> countWords(String file)
     {
-        String line = "";
+        String inputLine;
         int i,j = 0;
+        Set<String> bannedWords = new HashSet<>();
+
+        //Setting banned words from file and intialising banned words with defaults even if nothing has been added
+        try 
+        {
+            File banFile= new File("banFile.txt");
+            
+            if(banFile.createNewFile())
+            {
+                System.out.println("banFile.txt is created, this will store the banned output words for the topic modeller");
+                defaultBans();
+            }
+            else
+            {
+                defaultBans();
+                BufferedReader banReader = new BufferedReader(new FileReader("banFile.txt"));
+                while((inputLine = banReader.readLine()) != null)
+                {
+                    bannedWords.add(inputLine);
+                }
+                banReader.close();
+            }//end if else
+
+        }//end try 
+        catch (IOException e) 
+        {
+            System.out.println("Something wrong has happened with the banFile during wordCount() execution");
         
+        }//end catch
+        
+
         //make a hashmap mapping the key of a word to an integer value
         Map<String, Integer> wordCount = new HashMap<>();
         try 
         {
-            BufferedReader reader = new BufferedReader(new FileReader(file));//create a new reader for first file
+            BufferedReader wordReader = new BufferedReader(new FileReader(file));//create a new wordReader for first file
             
-            while (reader.readLine() != null) //while the next line isnt't null, i.e the end of the file hasn't been reached
+            while ((inputLine = wordReader.readLine()) != null) //while the next line isnt't null, i.e the end of the file hasn't been reached
             {
-                String[] words = line.split(" [^ a-z A-Z ]+ ");//split the String by non alphabet chars //TODO THIS DOESNT WORK
+                String[] words = inputLine.split("[^a-zA-Z]+");//split the String by non alphabet chars 
                 for (String curword : words) //for each String called curword within the array of words within words
                 {
-                    if (curword.length() >= 1 ) 
+                    if (curword.length() > 1) 
                     {
                         curword = curword.toLowerCase(); // convert to a lower case
-                        if (wordCount.containsKey(curword)) //if the current word is already mapped as a key in the hashmap
+                        if(!bannedWords.contains(curword))
                         {
-                            wordCount.put(curword, wordCount.get(curword) + 1); // incremeent the integer mapped to that key
-                        } 
-                        else 
-                        {
-                            wordCount.put(curword, 1); //add the current word as a key and set the value to 1
-                        }//end if-else
+                            if (wordCount.containsKey(curword)) //if the current word is already mapped as a key in the hashmap
+                            {
+                                wordCount.put(curword, wordCount.get(curword) + 1); // incremeent the integer mapped to that key
+                            } 
+                            else 
+                            {
+                                wordCount.put(curword, 1); //add the current word as a key and set the value to 1
+                            }//end if-else
+                        }
                     }//end if
                 }//end for each
             }//end while
-            reader.close();
+            wordReader.close();
         }//end try
         catch (Exception e) 
         {
             e.printStackTrace();
         }//end catch
-
 
         List<Map.Entry<String, Integer> > sortedList = new ArrayList<>(wordCount.entrySet());
         //Creates a new list of map entries from the hashmap created above
@@ -62,7 +94,54 @@ public class FileManager
         //sorts the largest 10 elements to the start of the list, index's 0->9
         
 
-        return sortedList;
+        return sortedList.subList(0, 9);
+    }//end countWords(String)
+
+    public static void banWords(ArrayList<String> wordsToBan)
+    {
+        int i;
+        try 
+        {
+            File banFile= new File("banFile.txt");
+            BufferedWriter banWriter = new BufferedWriter(new FileWriter("banFile.txt"));
+            
+            if(banFile.createNewFile())
+            {
+                System.out.println("banFile.txt is created, this will store the banned output words for the topic modeller");
+                defaultBans();
+            }
+            for(i=0; i<wordsToBan.size(); i++)
+            {
+                banWriter.append(wordsToBan.get(i) + "\n");
+            }
+            banWriter.close();
+        }//end try 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+            System.out.println("Something wrong has happened with the banFile during banWords() execution");
+        
+        }//end catch
+    }//end banWords(String[])
+
+    public static void defaultBans()
+    {
+        String[] defaultBans = {"as", "is", "are", "for", "the", "of", "and", "in", "to", "a", "have", "from", "that", "by", "on", "their", "they're", "there", "was", "they", "with"};
+        int i;
+
+        try (BufferedWriter banWriter = new BufferedWriter(new FileWriter("banFile.txt"))) {
+            for(i=0; i<defaultBans.length; i++)
+            {
+                banWriter.append(defaultBans[i] + "\n");
+            }
+            banWriter.close();
+        } catch (IOException e) {
+            System.out.println("Error executing defaultBans()");
+            e.printStackTrace();
+        }
+        
     }
-}
+
+    
+}//end file manager
 
