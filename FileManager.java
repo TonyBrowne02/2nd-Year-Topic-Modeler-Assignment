@@ -1,3 +1,5 @@
+//retrieving banned words from initilaisiation doesn't work, 
+
 /*
  * Author:Tony Browne
  * Date:28.03.2023 
@@ -27,7 +29,6 @@ public class FileManager
             }
             else
             {
-                defaultBans();
                 BufferedReader banReader = new BufferedReader(new FileReader("banFile.txt"));
                 while((inputLine = banReader.readLine()) != null)
                 {
@@ -92,56 +93,44 @@ public class FileManager
             }//end for
         }//end outer for
         //sorts the largest 10 elements to the start of the list, index's 0->9
-        
-
-        return sortedList.subList(0, 9);
+        return sortedList.subList(0, 10);
     }//end countWords(String)
 
-    public static void banWords(ArrayList<String> wordsToBan)
+    public static void banWords(String wordsToBan) throws IOException
     {
-        int i;
-        try 
+        File banFile= new File("banFile.txt");
+        try (BufferedWriter banWriter = new BufferedWriter(new FileWriter("banFile.txt"))) 
         {
-            File banFile= new File("banFile.txt");
-            BufferedWriter banWriter = new BufferedWriter(new FileWriter("banFile.txt"));
-            
             if(banFile.createNewFile())
             {
                 System.out.println("banFile.txt is created, this will store the banned output words for the topic modeller");
-                defaultBans();
+                defaultBans();//add default bans
             }
-            for(i=0; i<wordsToBan.size(); i++)
-            {
-                banWriter.append(wordsToBan.get(i) + "\n");
-            }
+            System.out.println(wordsToBan);
+            banWriter.write(wordsToBan);
             banWriter.close();
-        }//end try 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-            System.out.println("Something wrong has happened with the banFile during banWords() execution");
-        
-        }//end catch
-    }//end banWords(String[])
+        }//end try
+
+    }//end banWords(String)
 
     public static void defaultBans()
     {
         String[] defaultBans = {"as", "is", "are", "for", "the", "of", "and", "in", "to", "a", "have", "from", "that", "by", "on", "their", "they're", "there", "was", "they", "with"};
         int i;
 
-        try (BufferedWriter banWriter = new BufferedWriter(new FileWriter("banFile.txt"))) {
+        try (BufferedWriter banWriter = new BufferedWriter(new FileWriter("banFile.txt"))) 
+        {
             for(i=0; i<defaultBans.length; i++)
             {
                 banWriter.append(defaultBans[i] + "\n");
             }
             banWriter.close();
-        } catch (IOException e) {
+        } catch (IOException e) 
+        {
             System.out.println("Error executing defaultBans()");
             e.printStackTrace();
-        }
-        
-    }
+        }//end try catch
 
-    
+    }//end defaultBans
+
 }//end file manager
-
