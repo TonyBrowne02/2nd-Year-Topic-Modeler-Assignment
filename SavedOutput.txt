@@ -1,0 +1,63 @@
+Files: C:\Users\tonyb\Desktop\TopicModeller\src\Bear.txt and C:\Users\tonyb\Desktop\TopicModeller\src\Cat.txt
+bear: 159
+bears: 148
+species: 63
+may: 43
+or: 84
+which: 74
+brown: 28
+polar: 26
+at: 25
+be: 62
+cats: 190
+cat: 155
+domestic: 55
+it: 51
+this: 33
+an: 33
+also: 32
+Overlap :30%
+
+Files: C:\Users\tonyb\Desktop\TopicModeller\src\Bear.txt and C:\Users\tonyb\Desktop\TopicModeller\src\Cat.txt
+bear: 159
+bears: 148
+species: 63
+may: 43
+brown: 28
+which: 74
+polar: 26
+black: 25
+at: 57
+be: 62
+cats: 190
+cat: 155
+domestic: 55
+it: 51
+this: 33
+an: 33
+can: 32
+Overlap :30%
+
+Files: C:\Users\tonyb\Desktop\TopicModeller\src\PolarBear.txt and C:\Users\tonyb\Desktop\TopicModeller\src\TheBattleOfChangping.txt
+polar: 289
+bears: 217
+bear: 210
+ice: 73
+arctic: 47
+hunting: 46
+sea: 44
+it: 43
+were: 40
+be: 40
+zhao: 64
+qin: 45
+army: 27
+kuo: 18
+changping: 16
+his: 15
+river: 15
+battle: 12
+qi: 11
+bc: 10
+Overlap :0%
+
