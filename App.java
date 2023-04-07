@@ -8,8 +8,6 @@ public class App {
     /*
          Improving the GUI quality so that it looks better than a very basic GUI (e.g. layout, 
         colour etc)
-         Saving down the results persistently to a file, with the overlapping words written out 
-        too.
          Extra features that you think will enhance the application.
      */
 }

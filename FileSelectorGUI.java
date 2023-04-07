@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
@@ -24,10 +25,11 @@ public class FileSelectorGUI extends JFrame implements ActionListener
     private JTextArea banArea;
     private JTextField tfOverlap;
     private JLabel banLabel;
+    private JScrollPane scrollPane;
 
     public FileSelectorGUI()
     {
-        super("Text File Selector");//setting title
+        super("Topic Modeller");//setting title
 
         setSize(600,600);//size...
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,7 +37,6 @@ public class FileSelectorGUI extends JFrame implements ActionListener
 
         //Left panel
         panel = new JPanel(new BorderLayout());//borderlayout has no space between component by default, plus looks okay
-
             //first input
         inputLabel = new JLabel("File Path 1:");
         inputPanel = new JPanel(new BorderLayout());
@@ -80,9 +81,12 @@ public class FileSelectorGUI extends JFrame implements ActionListener
             //ban words area
         banLabel = new JLabel("Banned Words:");
         banArea = new JTextArea(10,20);
+        scrollPane = new JScrollPane(banArea);
+        rightPanel.add(scrollPane, BorderLayout.CENTER);
+
         rightTopPanel.add(banLabel, BorderLayout.NORTH);
         rightPanel.add(rightTopPanel, BorderLayout.NORTH);
-        rightPanel.add(banArea, BorderLayout.CENTER);
+
 
         banArea.setText("as\nis\nare\nfor\nthe\nof\nand\nin\nto\na\nhave\nfrom\nthat\nby\non\ntheir\nthey're\nthere\nwas\nthey\nwith");
 
@@ -94,6 +98,13 @@ public class FileSelectorGUI extends JFrame implements ActionListener
         rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
 
         panel.add(rightPanel, BorderLayout.EAST);
+
+        //colours of stuff
+        tfOverlap.setBackground(Color.BLUE);
+        banArea.setBackground(Color.GREEN);
+        tfFilePath.setBackground(Color.CYAN);
+        tfFilePath2.setBackground(Color.CYAN);
+        outputArea.setBackground(Color.ORANGE);
 
 
         //turning on the GUI
@@ -162,6 +173,7 @@ public class FileSelectorGUI extends JFrame implements ActionListener
 
                 //overlap since both files exist
                 Integer overlap = 0;
+                
                 for(Map.Entry<String, Integer> currentEntry2 : sortedList2)
                 {
                     for(Map.Entry<String, Integer> currentEntry1 : sortedList)
@@ -169,10 +181,17 @@ public class FileSelectorGUI extends JFrame implements ActionListener
                         if(currentEntry2.getKey().equals(currentEntry1.getKey()))
                         {
                             overlap+=10;
+                            currentEntry1.setValue(currentEntry2.getValue() + currentEntry1.getValue());
+                            //if there is overlap of keys then incrememnt the overlap % counter and set the value of the key in sortedList to be the sum of both entries
+                            //in the two sets
+                            currentEntry2.setValue(0);
+                            //set the value of the key which occurs in both to 0, used in saving the output to a file later
                         }
                     }
                 }
-                tfOverlap.setText(overlap.toString());
+                tfOverlap.setText(overlap + "%");
+                //send both lists to the FileManager.saveOutput(List1, List2, overlap ) Function
+                FileManager.saveOutput(sortedList, sortedList2, overlap, tfFilePath.getText(), tfFilePath2.getText());
             }
             else if(tempFile1.exists())
             {

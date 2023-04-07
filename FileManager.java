@@ -106,7 +106,6 @@ public class FileManager
                 System.out.println("banFile.txt is created, this will store the banned output words for the topic modeller");
                 defaultBans();//add default bans
             }
-            System.out.println(wordsToBan);
             banWriter.write(wordsToBan);
             banWriter.close();
         }//end try
@@ -132,5 +131,42 @@ public class FileManager
         }//end try catch
 
     }//end defaultBans
+    
+    static File outputFile= new File("SavedOutput.txt");
+    public static void saveOutput(List<Map.Entry<String, Integer> > sortedList, List<Map.Entry<String, Integer> > sortedList2, Integer overlap, String file1, String file2)
+    {
+        System.out.println("Current file size: " + outputFile.length());
+        try 
+        {
+            outputFile.createNewFile();
+        
+            sortedList.addAll(sortedList2);//combine the two sets
+
+            try (BufferedWriter banWriter = new BufferedWriter(new FileWriter(outputFile, true))) 
+            {
+                banWriter.append("Files: " + file1 + " and " + file2 + "\n");
+                for (Map.Entry<String, Integer> keyString : sortedList) 
+                {
+                    if(keyString.getValue()!=0)
+                    {
+                        banWriter.append(keyString.getKey() + ": " + keyString.getValue() + "\n");
+                    }
+                }
+                banWriter.append("Overlap :" + overlap + "%" + "\n\n");
+                banWriter.close();
+            }
+            catch (IOException e) 
+            {
+                System.out.println("Error executing saveOutput()");
+                e.printStackTrace();
+            }//end try catch
+
+        }//end try 
+        catch (IOException e) 
+        {
+            System.out.println("Something wrong has happened with the banFile during wordCount() execution");
+        
+        }//end catch
+    }//end saveOutput()
 
 }//end file manager
