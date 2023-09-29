@@ -1,6 +1,8 @@
 # 2nd-Year-Topic-Modeler-Assignment
 Repository for a top modeler assignment given during second year term 2 of Computer Science: Infrastructure in TU Dublin 
 
+Topic modeller, created a program to display a GUI which prompts the user to select the location of two .txt files after which the program compares the top ten most common words of each file, excluding non-content words such as “the, in, at, the”. Once the two sets of words are found the percentage overlap is shown to the user. The program begins with an initial set of non-content words to ignore but there is functionality for the user to add and remove buffer words to/from the list. These changes are saved statically between launches of the program.
+
 o List of classes, with a description. 
   FileManager.java, this class is used when interacting with files, used to permform a variety of functions 
   
